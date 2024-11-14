@@ -4,23 +4,29 @@ import {
   ClientOnly,
   Heading,
   HStack,
+  Image,
   Progress,
   RadioGroup,
   Skeleton,
+  Text,
   VStack,
 } from "@chakra-ui/react";
 import { Button } from "@/components/ui/button";
 import { ColorModeToggle } from "@/components/color-mode-toggle";
-import { Logo } from "@/components/logo";
+import logo from "@/components/teamseas-tm-logo.png";
 
 function App() {
   return (
     <Box textAlign="center" fontSize="xl" pt="30vh">
       <VStack gap="8">
+        <Image src={logo} h="132px" />
         <Heading size="2xl" letterSpacing="tight">
-          <Logo h="32" pointerEvents="none" />
-          Welcome to Chakra UI v3 + Vite
+          Join the movement!
         </Heading>
+        <Text>
+          The team is growing everyday and scoring wins for <br /> the planet go
+          us with our big heads
+        </Text>
 
         <HStack gap="10">
           <Checkbox.Root defaultChecked>
