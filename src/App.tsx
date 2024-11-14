@@ -10,13 +10,15 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { Button } from "@/components/ui/button";
-import { ColorModeToggle } from "./components/color-mode-toggle";
+import { ColorModeToggle } from "@/components/color-mode-toggle";
+import { Logo } from "@/components/logo";
 
 function App() {
   return (
     <Box textAlign="center" fontSize="xl" pt="30vh">
       <VStack gap="8">
         <Heading size="2xl" letterSpacing="tight">
+          <Logo h="32" pointerEvents="none" />
           Welcome to Chakra UI v3 + Vite
         </Heading>
 
