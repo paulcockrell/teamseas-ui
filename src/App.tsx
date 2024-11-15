@@ -14,19 +14,39 @@ import {
 import { Button } from "@/components/ui/button";
 import { ColorModeToggle } from "@/components/color-mode-toggle";
 import logo from "@/components/teamseas-tm-logo.png";
+import AnimatedCounter from "./components/donation/Counter";
+import { useQuery } from "urql";
+
+const TotalDonationsQuery = `
+  query Query {
+    totalDonations
+  }
+`;
 
 function App() {
+  const [{ data, fetching, error }] = useQuery({
+    query: TotalDonationsQuery,
+  });
+
+  if (error) return <p>Oh no... {error.message}</p>;
+
   return (
     <Box textAlign="center" fontSize="xl" pt="30vh">
       <VStack gap="8">
         <Image src={logo} h="132px" />
-        <Heading size="2xl" letterSpacing="tight">
-          Join the movement!
-        </Heading>
-        <Text>
-          The team is growing everyday and scoring wins for <br /> the planet go
-          us with our big heads
+        <Heading size="4xl">JOIN THE MOVEMENT!</Heading>
+        <Text fontWeight="light">
+          The team is growing everyday and scoring wins for environment.
+          <br /> Remove trash with us and track our progress
         </Text>
+
+        <Heading as="h2" size="6xl">
+          {fetching ? (
+            <p>Loading...</p>
+          ) : (
+            <AnimatedCounter from={0} to={data.totalDonations} duration={1} />
+          )}
+        </Heading>
 
         <HStack gap="10">
           <Checkbox.Root defaultChecked>
