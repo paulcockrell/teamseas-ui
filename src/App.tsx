@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { ColorModeToggle } from "@/components/color-mode-toggle";
 import logo from "@/components/teamseas-tm-logo.png";
 import AnimatedCounter from "./components/donation/Counter";
-import { useQuery } from "urql";
+import { useQuery, useSubscription } from "urql";
 
 const TotalDonationsQuery = `
   query Query {
@@ -23,7 +23,23 @@ const TotalDonationsQuery = `
   }
 `;
 
+const TotalDonationsSubscriptionQuery = `
+  subscription Subscription {
+    totalUpdated {
+      total
+    }
+  }
+`;
+
+const handleTotalDonationsSubscription = (_previous, newTotal) => {
+  return newTotal?.totalUpdated?.total;
+};
+
 function App() {
+  const [res] = useSubscription(
+    { query: TotalDonationsSubscriptionQuery },
+    handleTotalDonationsSubscription,
+  );
   const [{ data, fetching, error }] = useQuery({
     query: TotalDonationsQuery,
   });
@@ -39,15 +55,18 @@ function App() {
           The team is growing everyday and scoring wins for environment.
           <br /> Remove trash with us and track our progress
         </Text>
-
         <Heading as="h2" size="6xl">
           {fetching ? (
             <p>Loading...</p>
           ) : (
-            <AnimatedCounter from={0} to={data.totalDonations} duration={1} />
+            <AnimatedCounter
+              from={0}
+              to={res.data || data.totalDonations}
+              duration={1}
+            />
           )}
         </Heading>
-
+        [Donation Wizard] [Leaderboard]
         <HStack gap="10">
           <Checkbox.Root defaultChecked>
             <Checkbox.HiddenInput />
@@ -75,13 +94,11 @@ function App() {
             </RadioGroup.Item>
           </RadioGroup.Root>
         </HStack>
-
         <Progress.Root width="300px" value={65} striped>
           <Progress.Track>
             <Progress.Range />
           </Progress.Track>
         </Progress.Root>
-
         <HStack>
           <Button>Let's go!</Button>
           <Button variant="outline">bun install @chakra-ui/react</Button>
